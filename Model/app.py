@@ -5,8 +5,8 @@ import joblib
 app = Flask(__name__)
 
 # Load your model and scaler
-model = joblib.load('pcos_model.pkl')
-scaler = joblib.load('scaler.pkl')
+model = joblib.load('pcos_model_basic.pkl')
+scaler = joblib.load('scaler_basic.pkl')
 
 # Route: Show the HTML form
 @app.route('/')
@@ -34,10 +34,6 @@ def predict_form():
             int(request.form['Pimples(Y/N)']),
             int(request.form['hair growth(Y/N)']),
             int(request.form['Skin darkening (Y/N)']),
-            int(request.form['Follicle No. (L)']),
-            int(request.form['Follicle No. (R)']),
-            float(request.form['Avg. F size (L) (mm)']),
-            float(request.form['Avg. F size (R) (mm)'])
         ]
 
         # Scale the input and make prediction
@@ -45,7 +41,7 @@ def predict_form():
         input_scaled = scaler.transform(input_array)
         prediction = model.predict(input_scaled)[0]
 
-        result = "⚠️ PCOS Detected" if prediction == 1 else "✅ No PCOS Detected"
+        result = "PCOS Detected" if prediction == 1 else "No PCOS Detected"
 
         return render_template('form.html', prediction=result)
 
